@@ -5,7 +5,7 @@ void main() {
 }
 
 class EccePlannerApp extends StatefulWidget {
-  const EccePlannerApp({Key? key}) : super(key: key);
+  const EccePlannerApp({super.key});
 
   @override
   State<EccePlannerApp> createState() => _EccePlannerAppState();
@@ -21,7 +21,7 @@ class _EccePlannerAppState extends State<EccePlannerApp> {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        primaryColor: const Color(0xFF00A859), // Vanuatu Green
+        primaryColor: const Color(0xFF00A859),
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF00A859),
           primary: const Color(0xFF00A859),
@@ -44,10 +44,10 @@ class NavigationHomeScreen extends StatefulWidget {
   final ValueChanged<String> onLanguageChanged;
 
   const NavigationHomeScreen({
-    Key? key,
+    super.key,
     required this.language,
     required this.onLanguageChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<NavigationHomeScreen> createState() => _NavigationHomeScreenState();
@@ -69,6 +69,16 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
     },
   ];
 
+  final TextEditingController _studentNameController = TextEditingController();
+  final TextEditingController _studentAgeController = TextEditingController();
+
+  @override
+  void dispose() {
+    _studentNameController.dispose();
+    _studentAgeController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
@@ -80,17 +90,17 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.language == 'Bislama' ? 'Vanuatu ECCE Planner' : 'Vanuatu ECCE Planner'),
+        title: const Text('Vanuatu ECCE Planner'),
         backgroundColor: const Color(0xFF00A859),
         foregroundColor: Colors.white,
         actions: [
           PopupMenuButton<String>(
             icon: const Icon(Icons.language, color: Colors.white),
             onSelected: widget.onLanguageChanged,
-            itemBuilder: (context) => [
-              const PopupMenuItem(value: 'Bislama', child: Text('Bislama')),
-              const PopupMenuItem(value: 'English', child: Text('English')),
-              const PopupMenuItem(value: 'Français', child: Text('Français')),
+            itemBuilder: (context) => const [
+              PopupMenuItem(value: 'Bislama', child: Text('Bislama')),
+              PopupMenuItem(value: 'English', child: Text('English')),
+              PopupMenuItem(value: 'Français', child: Text('Français')),
             ],
           ),
         ],
@@ -137,7 +147,6 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
     );
   }
 
-  // TAB 1: Lesson Plans
   Widget _buildLessonPlansTab() {
     return ListView(
       padding: const EdgeInsets.all(16.0),
@@ -181,9 +190,9 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
         ..._samplePlans.map((plan) => Card(
               margin: const EdgeInsets.symmetric(vertical: 6),
               child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: const Color(0xFF00A859).withOpacity(0.15),
-                  child: const Icon(Icons.description, color: Color(0xFF00A859)),
+                leading: const CircleAvatar(
+                  backgroundColor: Color(0xFFE0F2F1),
+                  child: Icon(Icons.description, color: Color(0xFF00A859)),
                 ),
                 title: Text(plan['title']!),
                 subtitle: Text('${plan['type']} • ${plan['date']}'),
@@ -199,7 +208,6 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
     );
   }
 
-  // TAB 2: Templates
   Widget _buildTemplatesTab() {
     final templates = [
       'Daily Lesson Plan Template',
@@ -237,7 +245,6 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
     );
   }
 
-  // TAB 3: Weekly Schedules
   Widget _buildWeeklySchedulesTab() {
     return ListView(
       padding: const EdgeInsets.all(16.0),
@@ -289,11 +296,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
     );
   }
 
-  // TAB 4: Registration Data Forms
   Widget _buildRegistrationFormsTab() {
-    final _nameController = TextEditingController();
-    final _ageController = TextEditingController();
-
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -310,7 +313,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           ),
           const SizedBox(height: 16),
           TextField(
-            controller: _nameController,
+            controller: _studentNameController,
             decoration: const InputDecoration(
               labelText: 'Child Full Name',
               border: OutlineInputBorder(),
@@ -319,7 +322,7 @@ class _NavigationHomeScreenState extends State<NavigationHomeScreen> {
           ),
           const SizedBox(height: 12),
           TextField(
-            controller: _ageController,
+            controller: _studentAgeController,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
               labelText: 'Age / Date of Birth',
